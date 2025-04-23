@@ -16,3 +16,9 @@ Jenkins writes a password here
 Reference sources: 
 https://www.jenkins.io/doc/book/installing/initial-settings/
 
+No firewall exceptions are needed given the default OS firewall config. 
+firewall and firewall chain resource types rely on a forge module
+
+Installer shell script should do the initial jenkins install and present the user with a URL and the contents of the initial password file. 
+
+We do skip the initial wizard setup, but 'admin' is our only configured user. 
