@@ -8,7 +8,7 @@ package { 'openjdk-21-jre':
 }
 exec { 'update-keys':
   path        => '/usr/bin:/bin',
-  command     => 
+  command     =>
 'wget -qO /usr/share/keyrings/jenkins-keyring.asc \
   https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key; apt update',
   subscribe   => File['/etc/apt/sources.list.d/jenkins.list'],
@@ -25,13 +25,11 @@ file { '/etc/apt/sources.list.d/jenkins.list':
 }
 
 package { 'jenkins':
-	ensure => installed,
-	require => [
+  ensure  => installed,
+  require => [
     File['/etc/apt/sources.list.d/jenkins.list'],
-    #File['/lib/systemd/system/jenkins.service'],
     Package['openjdk-21-jre'],
     Package['fontconfig'],
-    #Exec['systemd-daemon-reload'],
   ],
 }
 
@@ -46,7 +44,7 @@ file { '/lib/systemd/system/jenkins.service':
   mode   => '0644',
   owner  => 'root',
   group  => 'root',
-  source => "file:/root/jenkins.service",
+  source => 'file:/root/jenkins.service',
   notify => Exec['systemd-daemon-reload'],
 }
 
