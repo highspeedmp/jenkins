@@ -33,14 +33,18 @@ exec { 'updating keys for repositories':
 service { 'jenkins':
   ensure => running,
   enable => true,
-  #start => '/usr/bin/jenkins --httpPort=8000'
 }
 
-# manage systemd unit file
+file { '/lib/systemd/system/jenkins.service':
+  ensure => file,
+  mode   => '0644',
+  owner  => 'root',
+  group  => 'root',
+  source => "file:/root/jenkins.service",
+}
 
-
-#exec { 'systemd-daemon-reload':
-#  command     => '/usr/bin/systemctl daemon-reload',
-#  path        => ['/usr/bin'],
-#  refreshonly => true,
-#}
+exec { 'systemd-daemon-reload':
+  command     => '/usr/bin/systemctl daemon-reload',
+  path        => ['/usr/bin'],
+  refreshonly => true,
+}
