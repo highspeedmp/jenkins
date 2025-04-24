@@ -41,6 +41,7 @@ file { '/lib/systemd/system/jenkins.service':
   owner  => 'root',
   group  => 'root',
   source => "file:/root/jenkins.service",
+  notify => Exec['systemd-daemon-reload'],
 }
 
 exec { 'systemd-daemon-reload':
