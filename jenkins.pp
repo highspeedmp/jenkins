@@ -28,10 +28,10 @@ package { 'jenkins':
 	ensure => installed,
 	require => [
     File['/etc/apt/sources.list.d/jenkins.list'],
-    File['/lib/systemd/system/jenkins.service'],
+    #File['/lib/systemd/system/jenkins.service'],
     Package['openjdk-21-jre'],
     Package['fontconfig'],
-    Exec['systemd-daemon-reload'],
+    #Exec['systemd-daemon-reload'],
   ],
 }
 
@@ -54,4 +54,5 @@ exec { 'systemd-daemon-reload':
   command     => '/usr/bin/systemctl daemon-reload',
   path        => ['/usr/bin'],
   refreshonly => true,
+  notify      => Service['jenkins']
 }
