@@ -35,8 +35,9 @@ package { 'jenkins':
 }
 
 service { 'jenkins':
-  ensure => running,
-  enable => true,
+  ensure  => running,
+  enable  => true,
+  Require => Package['jenkins'],
 }
 
 file { '/lib/systemd/system/jenkins.service':
