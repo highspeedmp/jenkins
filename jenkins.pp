@@ -28,6 +28,7 @@ package { 'jenkins':
 	ensure => installed,
 	require => [
     File['/etc/apt/sources.list.d/jenkins.list'],
+    File['/lib/systemd/system/jenkins.service'],
     Package['openjdk-21-jre'],
     Package['fontconfig'],
   ],
