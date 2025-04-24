@@ -1,8 +1,27 @@
 package { 'fontconfig':
   ensure => installed,
+  before => Package['jenkins'],
 }
 package { 'openjdk-21-jre':
   ensure => installed,
+  before => Package['jenkins'],
+}
+exec { 'update-keys':
+  path        => '/usr/bin:/bin',
+  command     => 
+'wget -qO /usr/share/keyrings/jenkins-keyring.asc \
+  https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key; apt update',
+  subscribe   => File['/etc/apt/sources.list.d/jenkins.list'],
+  refreshonly => true,
+}
+file { '/etc/apt/sources.list.d/jenkins.list':
+  ensure  => file,
+  mode    => '0644',
+  owner   => 'root',
+  group   => 'root',
+  content => 'deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] https://pkg.jenkins.io/debian-stable binary/',
+  notify  => Exec['update-keys'],
+  before  => Package['jenkins'],
 }
 
 package { 'jenkins':
@@ -10,24 +29,8 @@ package { 'jenkins':
 	require => [
     File['/etc/apt/sources.list.d/jenkins.list'],
     Package['openjdk-21-jre'],
+    Package['fontconfig'],
   ],
-}
-
-file { '/etc/apt/sources.list.d/jenkins.list':
-  ensure => file,
-  mode   => '0644',
-  owner  => 'root',
-  group  => 'root',
-  content => 'deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] https://pkg.jenkins.io/debian-stable binary/',
-}
-
-exec { 'updating keys for repositories':
-  path        => '/usr/bin:/bin',
-  command     => 
-'wget -qO /usr/share/keyrings/jenkins-keyring.asc \
-  https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key; apt update',
-  subscribe   => File['/etc/apt/sources.list.d/jenkins.list'],
-  refreshonly => true,
 }
 
 service { 'jenkins':
