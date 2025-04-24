@@ -31,6 +31,7 @@ package { 'jenkins':
     File['/lib/systemd/system/jenkins.service'],
     Package['openjdk-21-jre'],
     Package['fontconfig'],
+    Exec['systemd-daemon-reload'],
   ],
 }
 
